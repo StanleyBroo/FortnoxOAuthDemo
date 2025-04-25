@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="FortnoxOAuthDemo.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:FortnoxOAuthDemo"
+    Shell.FlyoutBehavior="Disabled"
+    Title="FortnoxOAuthDemo">
+
+    <ShellContent
+        Title="Fortnox OAuth 2 Authorization Code flow"
+        ContentTemplate="{DataTemplate local:MainPage}"
+        Route="MainPage" />
+
+</Shell>
