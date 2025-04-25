@@ -27,6 +27,7 @@ namespace FortnoxOAuthDemo
             // QUICK PROTOTYPE: Code only for testing purposes.
             // Remove in production. Split responsibilities between backend and mobile app.
             // Handle secret storage securely in a backend vault after proper user authentication in your LOB system.
+            // Add proper error handling and logging.
 
             InitializeComponent();
             var config = new ConfigurationBuilder().AddUserSecrets<MainPage>().Build();
