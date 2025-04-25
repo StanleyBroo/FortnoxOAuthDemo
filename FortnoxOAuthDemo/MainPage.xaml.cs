@@ -99,7 +99,33 @@ namespace FortnoxOAuthDemo
 
         }
 
-       
+
+
+        public async Task<string> GetValidAccessTokenAsync()
+        {
+            var accessToken = await SecureStorage.GetAsync("access_token");
+            var refreshToken = await SecureStorage.GetAsync("refresh_token");
+            var expiresAtStr = await SecureStorage.GetAsync("expires_at");
+
+            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(expiresAtStr))
+            {
+                return null; // No token found -> login required
+            }
+
+            if (!DateTime.TryParse(expiresAtStr, out var expiresAt))
+            {
+                return null; // -> login required
+            }
+
+            if (DateTime.UtcNow.AddMinutes(2) >= expiresAt)
+            {
+                // Token has expired, refresh it
+                var newToken = await RefreshAccessTokenAsync(refreshToken);
+                return newToken; //might be null if refresh token has expired
+            }
+
+            return accessToken;
+        }
 
         private void LoginToFortnoxAndApproveIntegration()
         {
@@ -163,31 +189,6 @@ namespace FortnoxOAuthDemo
             {
                 await DisplayAlert("Fel", $"Token hämtning misslyckades: {response.StatusCode}", "OK");
             }
-        }
-
-        public async Task<string> GetValidAccessTokenAsync()
-        {
-            var accessToken = await SecureStorage.GetAsync("access_token");
-            var refreshToken = await SecureStorage.GetAsync("refresh_token");
-            var expiresAtStr = await SecureStorage.GetAsync("expires_at");
-
-            if (string.IsNullOrEmpty(accessToken) || string.IsNullOrEmpty(refreshToken) || string.IsNullOrEmpty(expiresAtStr))
-            {
-               
-                return null; // Ingen token, måste logga in
-            }
-
-            if (!DateTime.TryParse(expiresAtStr, out var expiresAt))
-                return null;
-
-            if (DateTime.UtcNow.AddMinutes(2) >= expiresAt)
-            {
-                // Token har gått ut eller går ut snart – försök förnya
-                var newToken = await RefreshAccessTokenAsync(refreshToken);
-                return newToken; //might be null if refresh token has expired
-            }
-
-            return accessToken;
         }
 
         private async Task<string> RefreshAccessTokenAsync(string refreshToken)
