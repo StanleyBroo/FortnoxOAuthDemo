@@ -45,7 +45,7 @@ namespace FortnoxOAuthDemo
 
             webView.Navigating += OnWebViewNavigating;
 
-            var getTokenButton = new Button { Text = "Get stored Token or login to Fortnox and approve Integration", Margin = 5 };
+            var getTokenButton = new Button { Text = "Get Token", Margin = 5 };
             getTokenButton.Clicked += async (s, e) =>
             {
                 var token = await GetValidAccessTokenAsync();
@@ -55,12 +55,12 @@ namespace FortnoxOAuthDemo
                 }
                 else
                 {
-                    await DisplayAlert("Token finns redan", token, "OK");
+                    await DisplayAlert("Token allready exists", token, "OK");
                 }
             };
 
 
-            var refreshTokenButton = new Button { Text = "Fetch new token with refresh-token",Margin=5 };
+            var refreshTokenButton = new Button { Text = "Refresh Token",Margin=5 };
             refreshTokenButton.Clicked += async (s, e) =>
             {
                 var refreshToken = await SecureStorage.GetAsync("refresh_token");
@@ -71,18 +71,18 @@ namespace FortnoxOAuthDemo
                 }
                 else
                 {
-                    await DisplayAlert("Nytt token hämtat :-)", newToken, "OK");
+                    await DisplayAlert("Token refreshed", newToken, "OK");
                 }
             };
 
 
-            var clearTokenButton = new Button { Text = "Ta bort token" , Margin = 5 };
+            var clearTokenButton = new Button { Text = "Remove Token" , Margin = 5 };
             clearTokenButton.Clicked += async (s, e) =>
             {
                 SecureStorage.Remove("access_token");
                 SecureStorage.Remove("refresh_token");
                 SecureStorage.Remove("expires_at");
-                await DisplayAlert("Token borttagen", "Token har tagits bort", "OK");
+                await DisplayAlert("Token removed", "Token has been removed", "OK");
             };
 
 
